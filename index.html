@@ -17,7 +17,6 @@
         
         body { background: var(--bg-color); padding-bottom: 70px; direction: rtl; }
         
-        /* Splash Screen */
         .splash-screen {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background: linear-gradient(135deg, #6200EE, #7c3aed, #4c1d95);
@@ -30,7 +29,7 @@
         .splash-title { font-size: 32px; font-weight: 900; color: white; margin-bottom: 10px; text-shadow: 0 2px 10px rgba(0,0,0,0.3); letter-spacing: 3px; }
         .splash-subtitle { font-size: 16px; color: rgba(255,255,255,0.8); margin-bottom: 30px; font-weight: 600; }
         .splash-loader { width: 200px; height: 4px; background: rgba(255,255,255,0.3); border-radius: 10px; overflow: hidden; }
-        .splash-loader-bar { height: 100%; background: #FFD700; border-radius: 10px; animation: loadingBar 1.5s ease-in-out infinite; width: 30%; box-shadow: 0 0 10px rgba(255,215,0,0.5); }
+        .splash-loader-bar { height: 100%; background: #FFD700; border-radius: 10px; animation: loadingBar 1.5s ease-in-out infinite; width: 30%; }
         @keyframes loadingBar { 0%{width:10%;margin-left:0}50%{width:60%;margin-left:20%}100%{width:10%;margin-left:90%} }
         .splash-dots { display: flex; gap: 8px; margin-top: 15px; }
         .splash-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.5); animation: dotPulse 1.5s ease-in-out infinite; }
@@ -258,7 +257,6 @@
 </head>
 <body>
 
-    <!-- Splash Screen -->
     <div class="splash-screen" id="splashScreen">
         <div class="splash-logo">🚗</div>
         <div class="splash-title">LASSIK MAC</div>
@@ -389,42 +387,51 @@
         const SECRET_CODE = 'malika123';
         const STORAGE_KEY = 'lassik_shared_data';
         
-        let DATA = loadSharedData();
-        let db = null;
+        let DATA = {
+            slider: [{ id: 1, image: 'photo.jpg', title: 'LASSIK MAC' }],
+            notifications: [],
+            videos: [],
+            ads: [],
+            settings: { app_color: '#6200EE', button_color: '#03DAC5', bg_color: '#F5F5F5', title_color: '#FFFFFF' },
+            products: [
+                {name:'قطع غيار',icon:'🔧',link:'#'},
+                {name:'آلة خياطة',icon:'🪡',link:'#'},
+                {name:'عروض حصرية',icon:'⚡',link:'#'}
+            ]
+        };
+        
         let currentSlide = 0, autoSlideTimer = null;
         let lastNotifIndex = -1, lastVideoIndex = -1;
 
-        function loadSharedData() {
+        // ✅ تحميل البيانات من localStorage مع دمج الافتراضيات
+        function loadAllData() {
             try {
                 const stored = localStorage.getItem(STORAGE_KEY);
                 if (stored) {
                     const parsed = JSON.parse(stored);
-                    if (parsed.slider && parsed.slider.length > 0) return parsed;
+                    if (parsed.slider && parsed.slider.length > 0) DATA.slider = parsed.slider;
+                    if (parsed.notifications && parsed.notifications.length > 0) DATA.notifications = parsed.notifications;
+                    if (parsed.videos && parsed.videos.length > 0) DATA.videos = parsed.videos;
+                    if (parsed.ads && parsed.ads.length > 0) DATA.ads = parsed.ads;
+                    if (parsed.settings) DATA.settings = parsed.settings;
+                    if (parsed.products && parsed.products.length > 0) DATA.products = parsed.products;
+                    console.log('✅ تم تحميل البيانات:', {
+                        slider: DATA.slider.length,
+                        notifications: DATA.notifications.length,
+                        videos: DATA.videos.length,
+                        ads: DATA.ads.length
+                    });
                 }
-            } catch(e) {}
-            return {
-                slider: [
-                    {
-                        id: 1,
-                        image: 'photo.jpg',
-                        title: 'LASSIK MAC'
-                    }
-                ],
-                notifications: [],
-                videos: [],
-                ads: [],
-                settings: { app_color: '#6200EE', button_color: '#03DAC5', bg_color: '#F5F5F5', title_color: '#FFFFFF' },
-                products: [
-                    {name:'قطع غيار',icon:'🔧',link:'#'},
-                    {name:'آلة خياطة',icon:'🪡',link:'#'},
-                    {name:'عروض حصرية',icon:'⚡',link:'#'}
-                ]
-            };
+            } catch(e) {
+                console.error('خطأ في تحميل البيانات:', e);
+            }
         }
 
-        function saveSharedData() {
+        // ✅ حفظ جميع البيانات
+        function saveAllData() {
             try {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA));
+                console.log('💾 تم حفظ البيانات');
                 return true;
             } catch(e) {
                 if (e.name === 'QuotaExceededError') {
@@ -432,6 +439,16 @@
                 }
                 return false;
             }
+        }
+
+        // ✅ تحديث كامل للصفحة الرئيسية
+        function refreshAllUI() {
+            applyColors();
+            buildSlider();
+            lastNotifIndex = -1;
+            lastVideoIndex = -1;
+            renderSingleNotif();
+            renderSingleVideo();
         }
 
         function applyColors() {
@@ -507,8 +524,6 @@
             setTimeout(()=>{const vid=c.querySelector('video');if(vid){vid.muted=true;vid.play().catch(()=>{});}},500);
         }
 
-        function refreshHomeContent() { renderSingleNotif(); renderSingleVideo(); }
-
         function renderAllNotifs() {
             const c=document.getElementById('allNotifs');if(!c)return;
             let list=[...DATA.notifications].reverse();if(!list.length){c.innerHTML='<div class="empty-msg">📭 لا توجد إشعارات</div>';return;}
@@ -572,7 +587,7 @@
             document.getElementById('page-'+page).style.display='block';
             document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
             const btn=document.querySelector(`.nav-item[data-page="${page}"]`);if(btn)btn.classList.add('active');
-            if(page==='home')refreshHomeContent();
+            if(page==='home'){lastNotifIndex=-1;lastVideoIndex=-1;renderSingleNotif();renderSingleVideo();}
             if(page==='notifications')renderAllNotifs();
             if(page==='videos')renderAllVideos();
             if(page==='products'){renderAdBanners();renderProducts();}
@@ -584,10 +599,11 @@
         function checkCode(){if(document.getElementById('codeInput').value.trim()===SECRET_CODE){closeModal('codeModal');openAdmin();toast('✅ مرحباً بك');}else{toast('❌ الكود غير صحيح');}}
         function openAdmin(){document.getElementById('app').style.display='none';document.getElementById('adminPanel').classList.add('show');adminTab('slider');window.scrollTo(0,0);}
         
+        // ✅ عند الخروج من لوحة التحكم - إعادة تحميل البيانات وتحديث الواجهة
         function closeAdmin(){
             document.getElementById('app').style.display='block';document.getElementById('adminPanel').classList.remove('show');
-            DATA = loadSharedData();
-            applyColors();buildSlider();lastNotifIndex=-1;lastVideoIndex=-1;refreshHomeContent();
+            loadAllData(); // إعادة تحميل البيانات من localStorage
+            refreshAllUI(); // تحديث كامل للواجهة
             window.scrollTo(0,0);toast('✅ تم تحديث التطبيق');
         }
 
@@ -598,44 +614,46 @@
             const idx={slider:0,notifications:1,videos:2,ads:3,settings:4};
             document.querySelectorAll('.admin-tabs .tab-btn')[idx[tab]].classList.add('active');
             const c=document.getElementById('adminContent');
-            if(tab==='slider'){c.innerHTML=`<h3>🖼️ السلايدر</h3><div style="background:#f9f9f9;padding:20px;border-radius:12px;margin:20px 0;"><h4>➕ إضافة</h4><div class="form-group"><label>العنوان</label><input type="text" id="slideTitle"></div><div class="form-group"><label>الصورة *</label><input type="file" id="slideFile" accept="image/*" onchange="previewFile('slideFile','slidePreview','image')"></div><div class="preview-area" id="slidePreview" onclick="document.getElementById('slideFile').click()">📷 اضغط</div><button class="btn btn-primary" style="width:100%;margin-top:15px;" onclick="addSlide()">➕ إضافة</button></div><div id="sliderList"></div>`;renderSliderList();}
-            else if(tab==='notifications'){c.innerHTML=`<h3>🔔 الإشعارات</h3><div style="background:#f9f9f9;padding:20px;border-radius:12px;margin:20px 0;"><h4>➕ إضافة</h4><div class="form-group"><label>العنوان *</label><input type="text" id="notifTitle"></div><div class="form-group"><label>النص *</label><textarea id="notifContent"></textarea></div><div class="form-group"><label>صورة</label><input type="file" id="notifFile" accept="image/*" onchange="previewFile('notifFile','notifPreview','image')"></div><div class="preview-area" id="notifPreview" onclick="document.getElementById('notifFile').click()">📷 اضغط</div><button class="btn btn-primary" style="width:100%;margin-top:15px;" onclick="addNotif()">➕ نشر</button></div><div id="notifList"></div>`;renderNotifList();}
-            else if(tab==='videos'){c.innerHTML=`<h3>🎬 الفيديوهات</h3><div style="background:#f9f9f9;padding:20px;border-radius:12px;margin:20px 0;"><h4>⬆️ رفع</h4><div class="form-group"><label>العنوان *</label><input type="text" id="videoTitle"></div><div class="form-group"><label>الفيديو *</label><input type="file" id="videoFile" accept="video/*" onchange="previewFile('videoFile','videoPreview','video')"></div><div class="preview-area" id="videoPreview" onclick="document.getElementById('videoFile').click()" style="min-height:180px;">🎬 اضغط</div><button class="btn btn-primary" style="width:100%;margin-top:15px;" onclick="addVideo()">⬆️ رفع</button></div><div id="videoList"></div>`;renderVideoList();}
-            else if(tab==='ads'){c.innerHTML=`<h3>📢 الإشهارات</h3><div style="background:#f9f9f9;padding:20px;border-radius:12px;margin:20px 0;"><h4>➕ إضافة</h4><div class="form-group"><label>العنوان *</label><input type="text" id="adTitle"></div><div class="form-group"><label>وصف</label><input type="text" id="adDescription"></div><div class="form-group"><label>الرابط *</label><input type="text" id="adLink"></div><div class="form-group"><label>صورة/فيديو *</label><input type="file" id="adMedia" accept="image/*,video/*" onchange="previewFile('adMedia','adPreview','auto')"></div><div class="preview-area" id="adPreview" onclick="document.getElementById('adMedia').click()" style="min-height:200px;">📷 اضغط</div><button class="btn btn-primary" style="width:100%;margin-top:15px;" onclick="addAd()">➕ إضافة</button></div><div id="adsList"></div>`;renderAdsList();}
+            if(tab==='slider'){c.innerHTML=`<h3>🖼️ السلايدر (${DATA.slider.length})</h3><div style="background:#f9f9f9;padding:20px;border-radius:12px;margin:20px 0;"><h4>➕ إضافة</h4><div class="form-group"><label>العنوان</label><input type="text" id="slideTitle"></div><div class="form-group"><label>الصورة *</label><input type="file" id="slideFile" accept="image/*" onchange="previewFile('slideFile','slidePreview','image')"></div><div class="preview-area" id="slidePreview" onclick="document.getElementById('slideFile').click()">📷 اضغط</div><button class="btn btn-primary" style="width:100%;margin-top:15px;" onclick="addSlide()">➕ إضافة</button></div><div id="sliderList"></div>`;renderSliderList();}
+            else if(tab==='notifications'){c.innerHTML=`<h3>🔔 الإشعارات (${DATA.notifications.length})</h3><div style="background:#f9f9f9;padding:20px;border-radius:12px;margin:20px 0;"><h4>➕ إضافة</h4><div class="form-group"><label>العنوان *</label><input type="text" id="notifTitle"></div><div class="form-group"><label>النص *</label><textarea id="notifContent"></textarea></div><div class="form-group"><label>صورة</label><input type="file" id="notifFile" accept="image/*" onchange="previewFile('notifFile','notifPreview','image')"></div><div class="preview-area" id="notifPreview" onclick="document.getElementById('notifFile').click()">📷 اضغط</div><button class="btn btn-primary" style="width:100%;margin-top:15px;" onclick="addNotif()">➕ نشر</button></div><div id="notifList"></div>`;renderNotifList();}
+            else if(tab==='videos'){c.innerHTML=`<h3>🎬 الفيديوهات (${DATA.videos.length})</h3><div style="background:#f9f9f9;padding:20px;border-radius:12px;margin:20px 0;"><h4>⬆️ رفع</h4><div class="form-group"><label>العنوان *</label><input type="text" id="videoTitle"></div><div class="form-group"><label>الفيديو *</label><input type="file" id="videoFile" accept="video/*" onchange="previewFile('videoFile','videoPreview','video')"></div><div class="preview-area" id="videoPreview" onclick="document.getElementById('videoFile').click()" style="min-height:180px;">🎬 اضغط</div><button class="btn btn-primary" style="width:100%;margin-top:15px;" onclick="addVideo()">⬆️ رفع</button></div><div id="videoList"></div>`;renderVideoList();}
+            else if(tab==='ads'){c.innerHTML=`<h3>📢 الإشهارات (${DATA.ads.length})</h3><div style="background:#f9f9f9;padding:20px;border-radius:12px;margin:20px 0;"><h4>➕ إضافة</h4><div class="form-group"><label>العنوان *</label><input type="text" id="adTitle"></div><div class="form-group"><label>وصف</label><input type="text" id="adDescription"></div><div class="form-group"><label>الرابط *</label><input type="text" id="adLink"></div><div class="form-group"><label>صورة/فيديو *</label><input type="file" id="adMedia" accept="image/*,video/*" onchange="previewFile('adMedia','adPreview','auto')"></div><div class="preview-area" id="adPreview" onclick="document.getElementById('adMedia').click()" style="min-height:200px;">📷 اضغط</div><button class="btn btn-primary" style="width:100%;margin-top:15px;" onclick="addAd()">➕ إضافة</button></div><div id="adsList"></div>`;renderAdsList();}
             else if(tab==='settings'){c.innerHTML=`<h3>⚙️ الإعدادات</h3><div style="background:#f9f9f9;padding:20px;border-radius:12px;margin:20px 0;"><div class="form-group"><label>اللون الأساسي</label><div class="color-row"><input type="color" id="setAppColor" value="${DATA.settings.app_color}"><code>${DATA.settings.app_color}</code></div></div><div class="form-group"><label>لون الأزرار</label><div class="color-row"><input type="color" id="setButtonColor" value="${DATA.settings.button_color}"><code>${DATA.settings.button_color}</code></div></div><div class="form-group"><label>لون الخلفية</label><div class="color-row"><input type="color" id="setBgColor" value="${DATA.settings.bg_color}"><code>${DATA.settings.bg_color}</code></div></div><div class="form-group"><label>لون الشريط</label><div class="color-row"><input type="color" id="setTitleColor" value="${DATA.settings.title_color}"><code>${DATA.settings.title_color}</code></div></div><button class="btn btn-primary" style="width:100%;margin-top:15px;" onclick="saveColors()">💾 حفظ</button></div>`;}
         }
 
-        function addSlide(){const t=document.getElementById('slideTitle').value.trim(),f=document.getElementById('slideFile').files[0];if(!f){toast('⚠️ اختر صورة');return;}const r=new FileReader();r.onload=function(e){DATA.slider.push({id:Date.now(),image:e.target.result,title:t});saveSharedData();renderSliderList();toast('✅ تم');document.getElementById('slideTitle').value='';document.getElementById('slideFile').value='';document.getElementById('slidePreview').innerHTML='📷 اضغط';};r.readAsDataURL(f);}
-        function deleteSlide(id){if(confirm('حذف؟')){DATA.slider=DATA.slider.filter(s=>s.id!==id);saveSharedData();renderSliderList();toast('🗑️ تم');}}
+        // ✅ دوال الإضافة مع حفظ فوري وتحديث
+        function addSlide(){const t=document.getElementById('slideTitle').value.trim(),f=document.getElementById('slideFile').files[0];if(!f){toast('⚠️ اختر صورة');return;}const r=new FileReader();r.onload=function(e){DATA.slider.push({id:Date.now(),image:e.target.result,title:t});saveAllData();renderSliderList();toast('✅ تمت الإضافة! ستظهر عند العودة للتطبيق');document.getElementById('slideTitle').value='';document.getElementById('slideFile').value='';document.getElementById('slidePreview').innerHTML='📷 اضغط';};r.readAsDataURL(f);}
+        function deleteSlide(id){if(confirm('حذف؟')){DATA.slider=DATA.slider.filter(s=>s.id!==id);saveAllData();renderSliderList();toast('🗑️ تم');}}
         function renderSliderList(){const c=document.getElementById('sliderList');if(!c)return;if(!DATA.slider.length){c.innerHTML='<div class="empty-msg">لا توجد صور</div>';return;}c.innerHTML=DATA.slider.map((s,i)=>`<div class="list-row"><strong>#${i+1}</strong><img src="${s.image}"><div class="list-info"><strong>${s.title||'بدون عنوان'}</strong></div><button class="btn btn-primary btn-sm" onclick="editSlideTitle(${s.id})">✏️</button><button class="btn btn-danger btn-sm" onclick="deleteSlide(${s.id})">🗑️</button></div>`).join('');}
-        function editSlideTitle(id){const s=DATA.slider.find(x=>x.id===id);if(s){const t=prompt('العنوان:',s.title||'');if(t!==null){s.title=t.trim();saveSharedData();renderSliderList();}}}
+        function editSlideTitle(id){const s=DATA.slider.find(x=>x.id===id);if(s){const t=prompt('العنوان:',s.title||'');if(t!==null){s.title=t.trim();saveAllData();renderSliderList();}}}
 
-        function addNotif(){const t=document.getElementById('notifTitle').value.trim(),c=document.getElementById('notifContent').value.trim(),f=document.getElementById('notifFile').files[0];if(!t||!c){toast('⚠️ مطلوب عنوان ونص');return;}const n={id:Date.now(),title:t,content:c,image:'',date:new Date().toLocaleDateString('ar-MA')};const save=()=>{DATA.notifications.push(n);saveSharedData();renderNotifList();toast('✅ تم');document.getElementById('notifTitle').value='';document.getElementById('notifContent').value='';document.getElementById('notifFile').value='';document.getElementById('notifPreview').innerHTML='📷 اضغط';};if(f){const r=new FileReader();r.onload=function(e){n.image=e.target.result;save();};r.readAsDataURL(f);}else{save();}}
-        function deleteNotif(id){if(confirm('حذف؟')){DATA.notifications=DATA.notifications.filter(n=>n.id!==id);saveSharedData();renderNotifList();toast('🗑️ تم');}}
+        function addNotif(){const t=document.getElementById('notifTitle').value.trim(),c=document.getElementById('notifContent').value.trim(),f=document.getElementById('notifFile').files[0];if(!t||!c){toast('⚠️ مطلوب عنوان ونص');return;}const n={id:Date.now(),title:t,content:c,image:'',date:new Date().toLocaleDateString('ar-MA')};const save=()=>{DATA.notifications.push(n);saveAllData();renderNotifList();toast('✅ تم النشر! ستظهر عند العودة للتطبيق');document.getElementById('notifTitle').value='';document.getElementById('notifContent').value='';document.getElementById('notifFile').value='';document.getElementById('notifPreview').innerHTML='📷 اضغط';};if(f){const r=new FileReader();r.onload=function(e){n.image=e.target.result;save();};r.readAsDataURL(f);}else{save();}}
+        function deleteNotif(id){if(confirm('حذف؟')){DATA.notifications=DATA.notifications.filter(n=>n.id!==id);saveAllData();renderNotifList();toast('🗑️ تم');}}
         function renderNotifList(){const c=document.getElementById('notifList');if(!c)return;if(!DATA.notifications.length){c.innerHTML='<div class="empty-msg">لا توجد إشعارات</div>';return;}c.innerHTML=[...DATA.notifications].reverse().map(n=>`<div class="list-row">${n.image?`<img src="${n.image}">`:'<div style="width:70px;height:50px;background:#f0f0f0;border-radius:8px;display:flex;align-items:center;justify-content:center;">🔔</div>'}<div class="list-info"><strong>${n.title}</strong><small>${n.content.substring(0,40)}...</small></div><button class="btn btn-primary btn-sm" onclick="editNotif(${n.id})">✏️</button><button class="btn btn-danger btn-sm" onclick="deleteNotif(${n.id})">🗑️</button></div>`).join('');}
-        function editNotif(id){const n=DATA.notifications.find(x=>x.id===id);if(n){const t=prompt('العنوان:',n.title);if(t!==null){const c=prompt('النص:',n.content);if(c!==null){n.title=t.trim();n.content=c.trim();saveSharedData();renderNotifList();}}}}
+        function editNotif(id){const n=DATA.notifications.find(x=>x.id===id);if(n){const t=prompt('العنوان:',n.title);if(t!==null){const c=prompt('النص:',n.content);if(c!==null){n.title=t.trim();n.content=c.trim();saveAllData();renderNotifList();}}}}
 
-        function addVideo(){const t=document.getElementById('videoTitle').value.trim(),f=document.getElementById('videoFile').files[0];if(!t||!f){toast('⚠️ مطلوب');return;}const r=new FileReader();r.onload=function(e){DATA.videos.push({id:Date.now(),title:t,url:e.target.result,size:f.size});saveSharedData();renderVideoList();toast('✅ تم');document.getElementById('videoTitle').value='';document.getElementById('videoFile').value='';document.getElementById('videoPreview').innerHTML='🎬 اضغط';};r.readAsDataURL(f);}
-        function deleteVideo(id){if(confirm('حذف؟')){DATA.videos=DATA.videos.filter(v=>v.id!==id);saveSharedData();renderVideoList();toast('🗑️ تم');}}
+        function addVideo(){const t=document.getElementById('videoTitle').value.trim(),f=document.getElementById('videoFile').files[0];if(!t||!f){toast('⚠️ مطلوب');return;}const r=new FileReader();r.onload=function(e){DATA.videos.push({id:Date.now(),title:t,url:e.target.result,size:f.size});saveAllData();renderVideoList();toast('✅ تم الرفع! ستظهر عند العودة للتطبيق');document.getElementById('videoTitle').value='';document.getElementById('videoFile').value='';document.getElementById('videoPreview').innerHTML='🎬 اضغط';};r.readAsDataURL(f);}
+        function deleteVideo(id){if(confirm('حذف؟')){DATA.videos=DATA.videos.filter(v=>v.id!==id);saveAllData();renderVideoList();toast('🗑️ تم');}}
         function renderVideoList(){const c=document.getElementById('videoList');if(!c)return;if(!DATA.videos.length){c.innerHTML='<div class="empty-msg">لا توجد فيديوهات</div>';return;}c.innerHTML=DATA.videos.map(v=>`<div class="list-row"><video src="${v.url}" style="width:70px;height:50px;object-fit:cover;border-radius:8px;"></video><div class="list-info"><strong>${v.title}</strong><small>${formatSize(v.size)}</small></div><button class="btn btn-primary btn-sm" onclick="editVideoTitle(${v.id})">✏️</button><button class="btn btn-danger btn-sm" onclick="deleteVideo(${v.id})">🗑️</button></div>`).join('');}
-        function editVideoTitle(id){const v=DATA.videos.find(x=>x.id===id);if(v){const t=prompt('العنوان:',v.title);if(t){v.title=t.trim();saveSharedData();renderVideoList();}}}
+        function editVideoTitle(id){const v=DATA.videos.find(x=>x.id===id);if(v){const t=prompt('العنوان:',v.title);if(t){v.title=t.trim();saveAllData();renderVideoList();}}}
 
-        function addAd(){const t=document.getElementById('adTitle').value.trim(),d=document.getElementById('adDescription').value.trim(),l=document.getElementById('adLink').value.trim(),f=document.getElementById('adMedia').files[0];if(!t||!l||!f){toast('⚠️ مطلوب');return;}const r=new FileReader();r.onload=function(e){DATA.ads.push({id:Date.now(),title:t,description:d,link:l,media:e.target.result,mediaType:f.type.startsWith('video/')?'video':'image'});saveSharedData();renderAdsList();toast('✅ تم');document.getElementById('adTitle').value='';document.getElementById('adDescription').value='';document.getElementById('adLink').value='';document.getElementById('adMedia').value='';document.getElementById('adPreview').innerHTML='📷 اضغط';};r.readAsDataURL(f);}
-        function deleteAd(id){if(confirm('حذف؟')){DATA.ads=DATA.ads.filter(a=>a.id!==id);saveSharedData();renderAdsList();toast('🗑️ تم');}}
+        function addAd(){const t=document.getElementById('adTitle').value.trim(),d=document.getElementById('adDescription').value.trim(),l=document.getElementById('adLink').value.trim(),f=document.getElementById('adMedia').files[0];if(!t||!l||!f){toast('⚠️ مطلوب');return;}const r=new FileReader();r.onload=function(e){DATA.ads.push({id:Date.now(),title:t,description:d,link:l,media:e.target.result,mediaType:f.type.startsWith('video/')?'video':'image'});saveAllData();renderAdsList();toast('✅ تم');document.getElementById('adTitle').value='';document.getElementById('adDescription').value='';document.getElementById('adLink').value='';document.getElementById('adMedia').value='';document.getElementById('adPreview').innerHTML='📷 اضغط';};r.readAsDataURL(f);}
+        function deleteAd(id){if(confirm('حذف؟')){DATA.ads=DATA.ads.filter(a=>a.id!==id);saveAllData();renderAdsList();toast('🗑️ تم');}}
         function renderAdsList(){const c=document.getElementById('adsList');if(!c)return;if(!DATA.ads.length){c.innerHTML='<div class="empty-msg">📢 لا توجد إشهارات</div>';return;}c.innerHTML=DATA.ads.map(a=>`<div class="list-row">${a.mediaType==='video'?`<video src="${a.media}" style="width:70px;height:50px;object-fit:cover;border-radius:8px;"></video>`:`<img src="${a.media}" style="width:70px;height:50px;object-fit:cover;border-radius:8px;">`}<div class="list-info"><strong>${a.title}</strong></div><button class="btn btn-primary btn-sm" onclick="editAd(${a.id})">✏️</button><button class="btn btn-danger btn-sm" onclick="deleteAd(${a.id})">🗑️</button></div>`).join('');}
-        function editAd(id){const a=DATA.ads.find(x=>x.id===id);if(a){const t=prompt('العنوان:',a.title);if(t!==null){const d=prompt('الوصف:',a.description||'');if(d!==null){const l=prompt('الرابط:',a.link);if(l!==null){a.title=t.trim();a.description=d.trim();a.link=l.trim();saveSharedData();renderAdsList();}}}}}
+        function editAd(id){const a=DATA.ads.find(x=>x.id===id);if(a){const t=prompt('العنوان:',a.title);if(t!==null){const d=prompt('الوصف:',a.description||'');if(d!==null){const l=prompt('الرابط:',a.link);if(l!==null){a.title=t.trim();a.description=d.trim();a.link=l.trim();saveAllData();renderAdsList();}}}}}
 
-        function saveColors(){DATA.settings.app_color=document.getElementById('setAppColor').value;DATA.settings.button_color=document.getElementById('setButtonColor').value;DATA.settings.bg_color=document.getElementById('setBgColor').value;DATA.settings.title_color=document.getElementById('setTitleColor').value;saveSharedData();applyColors();toast('✅ تم');}
+        function saveColors(){DATA.settings.app_color=document.getElementById('setAppColor').value;DATA.settings.button_color=document.getElementById('setButtonColor').value;DATA.settings.bg_color=document.getElementById('setBgColor').value;DATA.settings.title_color=document.getElementById('setTitleColor').value;saveAllData();applyColors();toast('✅ تم');}
 
         function previewFile(i,p,t){const input=document.getElementById(i),preview=document.getElementById(p);if(!input.files[0]||!preview)return;const r=new FileReader();r.onload=function(e){preview.innerHTML=t==='image'?`<img src="${e.target.result}">`:`<video src="${e.target.result}" controls></video>`;};r.readAsDataURL(input.files[0]);}
 
         function toast(msg){const old=document.querySelector('.toast-msg');if(old)old.remove();const t=document.createElement('div');t.className='toast-msg';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>{if(t.parentNode)t.remove();},4000);}
 
         function startApp(){
-            DATA = loadSharedData();
+            loadAllData();
             applyColors();
             buildSlider();
-            refreshHomeContent();
+            renderSingleNotif();
+            renderSingleVideo();
             setTimeout(() => {
                 const splash = document.getElementById('splashScreen');
                 if (splash) {
