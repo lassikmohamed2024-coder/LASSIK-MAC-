@@ -14,9 +14,9 @@
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
-        
         body { background: var(--bg-color); padding-bottom: 70px; direction: rtl; }
         
+        /* Splash Screen */
         .splash-screen {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background: linear-gradient(135deg, #6200EE, #7c3aed, #4c1d95);
@@ -26,7 +26,7 @@
         .splash-screen.hide { opacity: 0; pointer-events: none; transform: scale(1.1); }
         .splash-logo { font-size: 60px; animation: splashBounce 1s ease-in-out infinite; margin-bottom: 20px; }
         @keyframes splashBounce { 0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)} }
-        .splash-title { font-size: 32px; font-weight: 900; color: white; margin-bottom: 10px; text-shadow: 0 2px 10px rgba(0,0,0,0.3); letter-spacing: 3px; }
+        .splash-title { font-size: 32px; font-weight: 900; color: white; margin-bottom: 10px; }
         .splash-subtitle { font-size: 16px; color: rgba(255,255,255,0.8); margin-bottom: 30px; font-weight: 600; }
         .splash-loader { width: 200px; height: 4px; background: rgba(255,255,255,0.3); border-radius: 10px; overflow: hidden; }
         .splash-loader-bar { height: 100%; background: #FFD700; border-radius: 10px; animation: loadingBar 1.5s ease-in-out infinite; width: 30%; }
@@ -36,51 +36,18 @@
         .splash-dot:nth-child(2){animation-delay:0.3s}.splash-dot:nth-child(3){animation-delay:0.6s}
         @keyframes dotPulse { 0%,100%{opacity:0.3;transform:scale(1)}50%{opacity:1;transform:scale(1.5);background:#FFD700} }
         
-        .header {
-            background: var(--app-color); color: white; padding: 15px 20px;
-            position: sticky; top: 0; z-index: 1000; display: flex;
-            justify-content: space-between; align-items: center;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.15); overflow: hidden; min-height: 55px;
-        }
-        
-        .header-title-container {
-            flex: 1; display: flex; align-items: center; justify-content: center;
-            height: 40px; overflow: hidden; position: relative; text-align: center;
-        }
-        
-        .animated-text {
-            position: absolute; left: 50%; transform: translateX(-50%) translateY(40px);
-            font-size: 22px; font-weight: 900; white-space: nowrap;
-            animation: textCarousel 9s ease-in-out infinite; opacity: 0;
-            text-shadow: 0 2px 6px rgba(0,0,0,0.3); width: 100%; text-align: center;
-        }
-        
+        .header { background: var(--app-color); color: white; padding: 15px 20px; position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 15px rgba(0,0,0,0.15); overflow: hidden; min-height: 55px; }
+        .header-title-container { flex: 1; display: flex; align-items: center; justify-content: center; height: 40px; overflow: hidden; position: relative; text-align: center; }
+        .animated-text { position: absolute; left: 50%; transform: translateX(-50%) translateY(40px); font-size: 22px; font-weight: 900; white-space: nowrap; animation: textCarousel 9s ease-in-out infinite; opacity: 0; text-shadow: 0 2px 6px rgba(0,0,0,0.3); width: 100%; text-align: center; }
         .animated-text.english { font-family: 'Arial Black', sans-serif; font-size: 22px; letter-spacing: 2px; direction: ltr; }
         .animated-text.arabic { font-family: 'Cairo', 'Arial', sans-serif; font-size: 22px; direction: rtl; }
         .animated-text:nth-child(1) { animation-delay: 0s; }
         .animated-text:nth-child(2) { animation-delay: 3s; }
         .animated-text:nth-child(3) { animation-delay: 6s; }
+        @keyframes textCarousel { 0% { opacity: 0; transform: translateX(-50%) translateY(40px); } 5% { opacity: 1; transform: translateX(-50%) translateY(0); } 25% { opacity: 1; transform: translateX(-50%) translateY(0); } 30% { opacity: 0; transform: translateX(-50%) translateY(-40px); } 100% { opacity: 0; transform: translateX(-50%) translateY(-40px); } }
+        .admin-btn { background: rgba(255,255,255,0.25); color: white; border: none; padding: 8px 18px; border-radius: 20px; cursor: pointer; font-size: 13px; font-weight: bold; white-space: nowrap; border: 1px solid rgba(255,255,255,0.2); z-index: 2; }
         
-        @keyframes textCarousel {
-            0% { opacity: 0; transform: translateX(-50%) translateY(40px); }
-            5% { opacity: 1; transform: translateX(-50%) translateY(0); }
-            25% { opacity: 1; transform: translateX(-50%) translateY(0); }
-            30% { opacity: 0; transform: translateX(-50%) translateY(-40px); }
-            100% { opacity: 0; transform: translateX(-50%) translateY(-40px); }
-        }
-        
-        .admin-btn {
-            background: rgba(255,255,255,0.25); color: white; border: none;
-            padding: 8px 18px; border-radius: 20px; cursor: pointer; font-size: 13px;
-            font-weight: bold; white-space: nowrap; border: 1px solid rgba(255,255,255,0.2); z-index: 2;
-        }
-        
-        .shop-banner {
-            margin: 15px 15px 5px;
-            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
-            border-radius: 20px; padding: 20px; position: relative; overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2); cursor: pointer; transition: all 0.3s;
-        }
+        .shop-banner { margin: 15px 15px 5px; background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460); border-radius: 20px; padding: 20px; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2); cursor: pointer; transition: all 0.3s; }
         .shop-banner:hover { transform: translateY(-3px); }
         .shop-orb { position: absolute; border-radius: 50%; opacity: 0.15; animation: orbFloat 6s ease-in-out infinite; }
         .shop-orb.orb1 { width: 100px; height: 100px; background: var(--app-color); top: -30px; left: -20px; }
@@ -100,11 +67,7 @@
         .quick-cat-item { display: flex; align-items: center; gap: 6px; background: white; padding: 10px 18px; border-radius: 25px; white-space: nowrap; font-size: 13px; font-weight: 700; color: #444; cursor: pointer; transition: all 0.3s; box-shadow: 0 2px 10px rgba(0,0,0,0.06); border: 2px solid transparent; }
         .quick-cat-item:hover { border-color: var(--app-color); color: var(--app-color); transform: translateY(-2px); }
         
-        .contact-banner {
-            margin: 15px; background: linear-gradient(135deg, #007AFF, #00C6FF);
-            border-radius: 20px; padding: 20px; position: relative; overflow: hidden;
-            cursor: pointer; transition: all 0.3s; box-shadow: 0 8px 25px rgba(0,122,255,0.3);
-        }
+        .contact-banner { margin: 15px; background: linear-gradient(135deg, #007AFF, #00C6FF); border-radius: 20px; padding: 20px; position: relative; overflow: hidden; cursor: pointer; transition: all 0.3s; box-shadow: 0 8px 25px rgba(0,122,255,0.3); }
         .contact-banner:hover { transform: translateY(-3px); }
         .contact-banner-bg { position: absolute; top: -30px; right: -30px; width: 150px; height: 150px; background: rgba(255,255,255,0.1); border-radius: 50%; animation: contactOrb 4s ease-in-out infinite; }
         @keyframes contactOrb { 0%,100%{transform:scale(1)}50%{transform:scale(1.2)} }
@@ -190,14 +153,7 @@
         .product-card .icon { font-size: 40px; margin-bottom: 5px; }
         .product-card .name { font-size: 14px; font-weight: bold; color: #1a1a1a; }
         
-        .product-shop-btn {
-            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-            padding: 12px 20px; border-radius: 30px; font-size: 13px; font-weight: 800;
-            cursor: pointer; border: none; transition: all 0.3s;
-            animation: shakeBtn 3s ease-in-out infinite, colorChange 6s ease-in-out infinite;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2); text-decoration: none; width: 100%;
-            position: relative; overflow: hidden; color: white; letter-spacing: 0.5px; margin-top: 5px;
-        }
+        .product-shop-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 20px; border-radius: 30px; font-size: 13px; font-weight: 800; cursor: pointer; border: none; transition: all 0.3s; animation: shakeBtn 3s ease-in-out infinite, colorChange 6s ease-in-out infinite; box-shadow: 0 5px 20px rgba(0,0,0,0.2); text-decoration: none; width: 100%; position: relative; overflow: hidden; color: white; letter-spacing: 0.5px; margin-top: 5px; }
         @keyframes shakeBtn { 0%,100%{transform:translateX(0)}2%{transform:translateX(-3px)rotate(-1deg)}4%{transform:translateX(3px)rotate(1deg)}6%{transform:translateX(-3px)rotate(-1deg)}8%{transform:translateX(3px)rotate(1deg)}10%{transform:translateX(0)rotate(0)} }
         @keyframes colorChange { 0%{background:linear-gradient(135deg,#FF6B6B,#ee5a24)}20%{background:linear-gradient(135deg,#FFD93D,#FFA500)}40%{background:linear-gradient(135deg,#6BCB77,#2d8a4e)}60%{background:linear-gradient(135deg,#4D96FF,#0066ff)}80%{background:linear-gradient(135deg,#A855F7,#7c3aed)}100%{background:linear-gradient(135deg,#FF6B6B,#ee5a24)} }
         .product-shop-btn::before { content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(45deg,transparent,rgba(255,255,255,0.3),transparent);animation:shineEffect 2s infinite; }
@@ -292,71 +248,35 @@
                 <button class="arrow-btn prev" onclick="prevSlide()">❮</button>
                 <button class="arrow-btn next" onclick="nextSlide()">❯</button>
             </div>
-
             <div class="shop-banner" onclick="goToProducts()">
-                <div class="shop-orb orb1"></div>
-                <div class="shop-orb orb2"></div>
-                <div class="shop-orb orb3"></div>
+                <div class="shop-orb orb1"></div><div class="shop-orb orb2"></div><div class="shop-orb orb3"></div>
                 <div class="shop-content">
-                    <div class="shop-text">
-                        <div class="shop-title">🛍️ اكتشف منتجاتنا المميزة</div>
-                        <div class="shop-subtitle">قطع غيار أصلية • آلات خياطة • عروض حصرية</div>
-                        <span class="shop-cta">تسوق الآن ←</span>
-                    </div>
+                    <div class="shop-text"><div class="shop-title">🛍️ اكتشف منتجاتنا المميزة</div><div class="shop-subtitle">قطع غيار أصلية • آلات خياطة • عروض حصرية</div><span class="shop-cta">تسوق الآن ←</span></div>
                     <div class="shop-icon-large">🛒</div>
                 </div>
             </div>
-
             <div class="quick-categories">
                 <div class="quick-cat-item" onclick="event.stopPropagation(); goToProducts();"><span>🔧</span> قطع غيار</div>
                 <div class="quick-cat-item" onclick="event.stopPropagation(); goToProducts();"><span>🪡</span> آلات خياطة</div>
                 <div class="quick-cat-item" onclick="event.stopPropagation(); goToProducts();"><span>⚡</span> عروض حصرية</div>
             </div>
-
             <div class="divider-ornament">✦ أحدث العروض والإشعارات ✦</div>
             <div class="notif-container" id="singleNotif"></div>
-
             <div class="contact-banner" onclick="goToContact()">
                 <div class="contact-banner-bg"></div>
                 <div class="contact-banner-content">
-                    <div class="contact-banner-text">
-                        <div class="contact-banner-title">📞 تحتاج مساعدة؟</div>
-                        <div class="contact-banner-subtitle">فريقنا جاهز للرد على استفساراتكم</div>
-                        <span class="contact-banner-btn">تواصل معنا الآن ←</span>
-                    </div>
+                    <div class="contact-banner-text"><div class="contact-banner-title">📞 تحتاج مساعدة؟</div><div class="contact-banner-subtitle">فريقنا جاهز للرد على استفساراتكم</div><span class="contact-banner-btn">تواصل معنا الآن ←</span></div>
                     <div class="contact-banner-icon">💬</div>
                 </div>
             </div>
-
             <div class="section-title">🎬 فيديو مميز</div>
             <div class="video-grid" id="singleVideo"></div>
         </div>
 
-        <div id="page-notifications" style="display:none;">
-            <div class="section-title">📢 جميع الإشعارات</div>
-            <div class="notif-container" id="allNotifs"></div>
-        </div>
-
-        <div id="page-videos" style="display:none;">
-            <div class="section-title">🎬 مكتبة الفيديوهات</div>
-            <div class="video-grid" id="allVideos"></div>
-        </div>
-
-        <div id="page-products" style="display:none;">
-            <div class="section-title">🛍️ عروضنا وإشهاراتنا</div>
-            <div class="ad-banners-section" id="adBanners"></div>
-            <div class="section-title">📦 جميع المنتجات</div>
-            <div class="products-grid" id="productsGrid"></div>
-        </div>
-
-        <div id="page-contact" style="display:none;">
-            <div class="section-title">📞 اتصل بنا</div>
-            <div class="contact-box">
-                <a href="https://wa.me/212600000000" class="contact-link whatsapp">💬 واتساب</a>
-                <a href="tel:+212600000000" class="contact-link phone">📱 اتصال هاتفي</a>
-                <a href="mailto:contact@lassikmac.com" class="contact-link email">📧 بريد إلكتروني</a>
-            </div>
-        </div>
+        <div id="page-notifications" style="display:none;"><div class="section-title">📢 جميع الإشعارات</div><div class="notif-container" id="allNotifs"></div></div>
+        <div id="page-videos" style="display:none;"><div class="section-title">🎬 مكتبة الفيديوهات</div><div class="video-grid" id="allVideos"></div></div>
+        <div id="page-products" style="display:none;"><div class="section-title">🛍️ عروضنا وإشهاراتنا</div><div class="ad-banners-section" id="adBanners"></div><div class="section-title">📦 جميع المنتجات</div><div class="products-grid" id="productsGrid"></div></div>
+        <div id="page-contact" style="display:none;"><div class="section-title">📞 اتصل بنا</div><div class="contact-box"><a href="https://wa.me/212600000000" class="contact-link whatsapp">💬 واتساب</a><a href="tel:+212600000000" class="contact-link phone">📱 اتصال هاتفي</a><a href="mailto:contact@lassikmac.com" class="contact-link email">📧 بريد إلكتروني</a></div></div>
 
         <div class="bottom-nav">
             <button class="nav-item active" data-page="home" onclick="switchPage('home')"><span class="nav-icon">🏠</span> الرئيسية</button>
@@ -385,71 +305,60 @@
 
     <script>
         const SECRET_CODE = 'malika123';
+        // ✅ استخدام localStorage مع مفتاح موحد ليشاهده جميع المستخدمين
         const STORAGE_KEY = 'lassik_shared_data';
         
-        let DATA = {
-            slider: [{ id: 1, image: 'photo.jpg', title: 'LASSIK MAC' }],
-            notifications: [],
-            videos: [],
-            ads: [],
-            settings: { app_color: '#6200EE', button_color: '#03DAC5', bg_color: '#F5F5F5', title_color: '#FFFFFF' },
-            products: [
-                {name:'قطع غيار',icon:'🔧',link:'#'},
-                {name:'آلة خياطة',icon:'🪡',link:'#'},
-                {name:'عروض حصرية',icon:'⚡',link:'#'}
-            ]
-        };
-        
+        let DATA = loadSharedData();
         let currentSlide = 0, autoSlideTimer = null;
         let lastNotifIndex = -1, lastVideoIndex = -1;
 
-        // ✅ تحميل البيانات من localStorage مع دمج الافتراضيات
-        function loadAllData() {
+        // ✅ تحميل البيانات من localStorage المشترك
+        function loadSharedData() {
             try {
                 const stored = localStorage.getItem(STORAGE_KEY);
                 if (stored) {
                     const parsed = JSON.parse(stored);
-                    if (parsed.slider && parsed.slider.length > 0) DATA.slider = parsed.slider;
-                    if (parsed.notifications && parsed.notifications.length > 0) DATA.notifications = parsed.notifications;
-                    if (parsed.videos && parsed.videos.length > 0) DATA.videos = parsed.videos;
-                    if (parsed.ads && parsed.ads.length > 0) DATA.ads = parsed.ads;
-                    if (parsed.settings) DATA.settings = parsed.settings;
-                    if (parsed.products && parsed.products.length > 0) DATA.products = parsed.products;
-                    console.log('✅ تم تحميل البيانات:', {
-                        slider: DATA.slider.length,
-                        notifications: DATA.notifications.length,
-                        videos: DATA.videos.length,
-                        ads: DATA.ads.length
-                    });
+                    if (parsed.slider && parsed.slider.length > 0) return parsed;
                 }
-            } catch(e) {
-                console.error('خطأ في تحميل البيانات:', e);
-            }
+            } catch(e) {}
+            // بيانات افتراضية إذا لم تكن هناك بيانات محفوظة
+            return {
+                slider: [{ id: 1, image: 'photo.jpg', title: 'LASSIK MAC' }],
+                notifications: [],
+                videos: [],
+                ads: [],
+                settings: { app_color: '#6200EE', button_color: '#03DAC5', bg_color: '#F5F5F5', title_color: '#FFFFFF' },
+                products: [
+                    {name:'قطع غيار',icon:'🔧',link:'#'},
+                    {name:'آلة خياطة',icon:'🪡',link:'#'},
+                    {name:'عروض حصرية',icon:'⚡',link:'#'}
+                ]
+            };
         }
 
-        // ✅ حفظ جميع البيانات
-        function saveAllData() {
+        // ✅ حفظ البيانات في localStorage المشترك
+        function saveSharedData() {
             try {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA));
-                console.log('💾 تم حفظ البيانات');
                 return true;
             } catch(e) {
-                if (e.name === 'QuotaExceededError') {
-                    toast('⚠️ الذاكرة ممتلئة! احذف بعض الفيديوهات الكبيرة');
-                }
+                toast('⚠️ الذاكرة ممتلئة! احذف بعض الفيديوهات الكبيرة');
                 return false;
             }
         }
 
-        // ✅ تحديث كامل للصفحة الرئيسية
-        function refreshAllUI() {
-            applyColors();
-            buildSlider();
-            lastNotifIndex = -1;
-            lastVideoIndex = -1;
-            renderSingleNotif();
-            renderSingleVideo();
-        }
+        // ✅ مراقبة التغييرات من localStorage (للمزامنة بين التبويبات)
+        window.addEventListener('storage', function(e) {
+            if (e.key === STORAGE_KEY && e.newValue) {
+                try {
+                    DATA = JSON.parse(e.newValue);
+                    applyColors();
+                    buildSlider();
+                    refreshHomeContent();
+                    console.log('🔄 تم تحديث البيانات من localStorage');
+                } catch(err) {}
+            }
+        });
 
         function applyColors() {
             const s=DATA.settings;
@@ -524,6 +433,8 @@
             setTimeout(()=>{const vid=c.querySelector('video');if(vid){vid.muted=true;vid.play().catch(()=>{});}},500);
         }
 
+        function refreshHomeContent() { renderSingleNotif(); renderSingleVideo(); }
+
         function renderAllNotifs() {
             const c=document.getElementById('allNotifs');if(!c)return;
             let list=[...DATA.notifications].reverse();if(!list.length){c.innerHTML='<div class="empty-msg">📭 لا توجد إشعارات</div>';return;}
@@ -587,7 +498,7 @@
             document.getElementById('page-'+page).style.display='block';
             document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
             const btn=document.querySelector(`.nav-item[data-page="${page}"]`);if(btn)btn.classList.add('active');
-            if(page==='home'){lastNotifIndex=-1;lastVideoIndex=-1;renderSingleNotif();renderSingleVideo();}
+            if(page==='home')refreshHomeContent();
             if(page==='notifications')renderAllNotifs();
             if(page==='videos')renderAllVideos();
             if(page==='products'){renderAdBanners();renderProducts();}
@@ -599,11 +510,10 @@
         function checkCode(){if(document.getElementById('codeInput').value.trim()===SECRET_CODE){closeModal('codeModal');openAdmin();toast('✅ مرحباً بك');}else{toast('❌ الكود غير صحيح');}}
         function openAdmin(){document.getElementById('app').style.display='none';document.getElementById('adminPanel').classList.add('show');adminTab('slider');window.scrollTo(0,0);}
         
-        // ✅ عند الخروج من لوحة التحكم - إعادة تحميل البيانات وتحديث الواجهة
         function closeAdmin(){
             document.getElementById('app').style.display='block';document.getElementById('adminPanel').classList.remove('show');
-            loadAllData(); // إعادة تحميل البيانات من localStorage
-            refreshAllUI(); // تحديث كامل للواجهة
+            DATA = loadSharedData();
+            applyColors();buildSlider();lastNotifIndex=-1;lastVideoIndex=-1;refreshHomeContent();
             window.scrollTo(0,0);toast('✅ تم تحديث التطبيق');
         }
 
@@ -614,52 +524,48 @@
             const idx={slider:0,notifications:1,videos:2,ads:3,settings:4};
             document.querySelectorAll('.admin-tabs .tab-btn')[idx[tab]].classList.add('active');
             const c=document.getElementById('adminContent');
-            if(tab==='slider'){c.innerHTML=`<h3>🖼️ السلايدر (${DATA.slider.length})</h3><div style="background:#f9f9f9;padding:20px;border-radius:12px;margin:20px 0;"><h4>➕ إضافة</h4><div class="form-group"><label>العنوان</label><input type="text" id="slideTitle"></div><div class="form-group"><label>الصورة *</label><input type="file" id="slideFile" accept="image/*" onchange="previewFile('slideFile','slidePreview','image')"></div><div class="preview-area" id="slidePreview" onclick="document.getElementById('slideFile').click()">📷 اضغط</div><button class="btn btn-primary" style="width:100%;margin-top:15px;" onclick="addSlide()">➕ إضافة</button></div><div id="sliderList"></div>`;renderSliderList();}
-            else if(tab==='notifications'){c.innerHTML=`<h3>🔔 الإشعارات (${DATA.notifications.length})</h3><div style="background:#f9f9f9;padding:20px;border-radius:12px;margin:20px 0;"><h4>➕ إضافة</h4><div class="form-group"><label>العنوان *</label><input type="text" id="notifTitle"></div><div class="form-group"><label>النص *</label><textarea id="notifContent"></textarea></div><div class="form-group"><label>صورة</label><input type="file" id="notifFile" accept="image/*" onchange="previewFile('notifFile','notifPreview','image')"></div><div class="preview-area" id="notifPreview" onclick="document.getElementById('notifFile').click()">📷 اضغط</div><button class="btn btn-primary" style="width:100%;margin-top:15px;" onclick="addNotif()">➕ نشر</button></div><div id="notifList"></div>`;renderNotifList();}
-            else if(tab==='videos'){c.innerHTML=`<h3>🎬 الفيديوهات (${DATA.videos.length})</h3><div style="background:#f9f9f9;padding:20px;border-radius:12px;margin:20px 0;"><h4>⬆️ رفع</h4><div class="form-group"><label>العنوان *</label><input type="text" id="videoTitle"></div><div class="form-group"><label>الفيديو *</label><input type="file" id="videoFile" accept="video/*" onchange="previewFile('videoFile','videoPreview','video')"></div><div class="preview-area" id="videoPreview" onclick="document.getElementById('videoFile').click()" style="min-height:180px;">🎬 اضغط</div><button class="btn btn-primary" style="width:100%;margin-top:15px;" onclick="addVideo()">⬆️ رفع</button></div><div id="videoList"></div>`;renderVideoList();}
-            else if(tab==='ads'){c.innerHTML=`<h3>📢 الإشهارات (${DATA.ads.length})</h3><div style="background:#f9f9f9;padding:20px;border-radius:12px;margin:20px 0;"><h4>➕ إضافة</h4><div class="form-group"><label>العنوان *</label><input type="text" id="adTitle"></div><div class="form-group"><label>وصف</label><input type="text" id="adDescription"></div><div class="form-group"><label>الرابط *</label><input type="text" id="adLink"></div><div class="form-group"><label>صورة/فيديو *</label><input type="file" id="adMedia" accept="image/*,video/*" onchange="previewFile('adMedia','adPreview','auto')"></div><div class="preview-area" id="adPreview" onclick="document.getElementById('adMedia').click()" style="min-height:200px;">📷 اضغط</div><button class="btn btn-primary" style="width:100%;margin-top:15px;" onclick="addAd()">➕ إضافة</button></div><div id="adsList"></div>`;renderAdsList();}
+            if(tab==='slider'){c.innerHTML=`<h3>🖼️ السلايدر</h3><div style="background:#f9f9f9;padding:20px;border-radius:12px;margin:20px 0;"><h4>➕ إضافة</h4><div class="form-group"><label>العنوان</label><input type="text" id="slideTitle"></div><div class="form-group"><label>الصورة *</label><input type="file" id="slideFile" accept="image/*" onchange="previewFile('slideFile','slidePreview','image')"></div><div class="preview-area" id="slidePreview" onclick="document.getElementById('slideFile').click()">📷 اضغط</div><button class="btn btn-primary" style="width:100%;margin-top:15px;" onclick="addSlide()">➕ إضافة</button></div><div id="sliderList"></div>`;renderSliderList();}
+            else if(tab==='notifications'){c.innerHTML=`<h3>🔔 الإشعارات</h3><div style="background:#f9f9f9;padding:20px;border-radius:12px;margin:20px 0;"><h4>➕ إضافة</h4><div class="form-group"><label>العنوان *</label><input type="text" id="notifTitle"></div><div class="form-group"><label>النص *</label><textarea id="notifContent"></textarea></div><div class="form-group"><label>صورة</label><input type="file" id="notifFile" accept="image/*" onchange="previewFile('notifFile','notifPreview','image')"></div><div class="preview-area" id="notifPreview" onclick="document.getElementById('notifFile').click()">📷 اضغط</div><button class="btn btn-primary" style="width:100%;margin-top:15px;" onclick="addNotif()">➕ نشر</button></div><div id="notifList"></div>`;renderNotifList();}
+            else if(tab==='videos'){c.innerHTML=`<h3>🎬 الفيديوهات</h3><div style="background:#f9f9f9;padding:20px;border-radius:12px;margin:20px 0;"><h4>⬆️ رفع</h4><div class="form-group"><label>العنوان *</label><input type="text" id="videoTitle"></div><div class="form-group"><label>الفيديو *</label><input type="file" id="videoFile" accept="video/*" onchange="previewFile('videoFile','videoPreview','video')"></div><div class="preview-area" id="videoPreview" onclick="document.getElementById('videoFile').click()" style="min-height:180px;">🎬 اضغط</div><button class="btn btn-primary" style="width:100%;margin-top:15px;" onclick="addVideo()">⬆️ رفع</button></div><div id="videoList"></div>`;renderVideoList();}
+            else if(tab==='ads'){c.innerHTML=`<h3>📢 الإشهارات</h3><div style="background:#f9f9f9;padding:20px;border-radius:12px;margin:20px 0;"><h4>➕ إضافة</h4><div class="form-group"><label>العنوان *</label><input type="text" id="adTitle"></div><div class="form-group"><label>وصف</label><input type="text" id="adDescription"></div><div class="form-group"><label>الرابط *</label><input type="text" id="adLink"></div><div class="form-group"><label>صورة/فيديو *</label><input type="file" id="adMedia" accept="image/*,video/*" onchange="previewFile('adMedia','adPreview','auto')"></div><div class="preview-area" id="adPreview" onclick="document.getElementById('adMedia').click()" style="min-height:200px;">📷 اضغط</div><button class="btn btn-primary" style="width:100%;margin-top:15px;" onclick="addAd()">➕ إضافة</button></div><div id="adsList"></div>`;renderAdsList();}
             else if(tab==='settings'){c.innerHTML=`<h3>⚙️ الإعدادات</h3><div style="background:#f9f9f9;padding:20px;border-radius:12px;margin:20px 0;"><div class="form-group"><label>اللون الأساسي</label><div class="color-row"><input type="color" id="setAppColor" value="${DATA.settings.app_color}"><code>${DATA.settings.app_color}</code></div></div><div class="form-group"><label>لون الأزرار</label><div class="color-row"><input type="color" id="setButtonColor" value="${DATA.settings.button_color}"><code>${DATA.settings.button_color}</code></div></div><div class="form-group"><label>لون الخلفية</label><div class="color-row"><input type="color" id="setBgColor" value="${DATA.settings.bg_color}"><code>${DATA.settings.bg_color}</code></div></div><div class="form-group"><label>لون الشريط</label><div class="color-row"><input type="color" id="setTitleColor" value="${DATA.settings.title_color}"><code>${DATA.settings.title_color}</code></div></div><button class="btn btn-primary" style="width:100%;margin-top:15px;" onclick="saveColors()">💾 حفظ</button></div>`;}
         }
 
-        // ✅ دوال الإضافة مع حفظ فوري وتحديث
-        function addSlide(){const t=document.getElementById('slideTitle').value.trim(),f=document.getElementById('slideFile').files[0];if(!f){toast('⚠️ اختر صورة');return;}const r=new FileReader();r.onload=function(e){DATA.slider.push({id:Date.now(),image:e.target.result,title:t});saveAllData();renderSliderList();toast('✅ تمت الإضافة! ستظهر عند العودة للتطبيق');document.getElementById('slideTitle').value='';document.getElementById('slideFile').value='';document.getElementById('slidePreview').innerHTML='📷 اضغط';};r.readAsDataURL(f);}
-        function deleteSlide(id){if(confirm('حذف؟')){DATA.slider=DATA.slider.filter(s=>s.id!==id);saveAllData();renderSliderList();toast('🗑️ تم');}}
+        // ✅ جميع دوال الإضافة تحفظ في localStorage المشترك
+        function addSlide(){const t=document.getElementById('slideTitle').value.trim(),f=document.getElementById('slideFile').files[0];if(!f){toast('⚠️ اختر صورة');return;}const r=new FileReader();r.onload=function(e){DATA.slider.push({id:Date.now(),image:e.target.result,title:t});saveSharedData();renderSliderList();toast('✅ تمت الإضافة للجميع');document.getElementById('slideTitle').value='';document.getElementById('slideFile').value='';document.getElementById('slidePreview').innerHTML='📷 اضغط';};r.readAsDataURL(f);}
+        function deleteSlide(id){if(confirm('حذف؟')){DATA.slider=DATA.slider.filter(s=>s.id!==id);saveSharedData();renderSliderList();toast('🗑️ تم للجميع');}}
         function renderSliderList(){const c=document.getElementById('sliderList');if(!c)return;if(!DATA.slider.length){c.innerHTML='<div class="empty-msg">لا توجد صور</div>';return;}c.innerHTML=DATA.slider.map((s,i)=>`<div class="list-row"><strong>#${i+1}</strong><img src="${s.image}"><div class="list-info"><strong>${s.title||'بدون عنوان'}</strong></div><button class="btn btn-primary btn-sm" onclick="editSlideTitle(${s.id})">✏️</button><button class="btn btn-danger btn-sm" onclick="deleteSlide(${s.id})">🗑️</button></div>`).join('');}
-        function editSlideTitle(id){const s=DATA.slider.find(x=>x.id===id);if(s){const t=prompt('العنوان:',s.title||'');if(t!==null){s.title=t.trim();saveAllData();renderSliderList();}}}
+        function editSlideTitle(id){const s=DATA.slider.find(x=>x.id===id);if(s){const t=prompt('العنوان:',s.title||'');if(t!==null){s.title=t.trim();saveSharedData();renderSliderList();}}}
 
-        function addNotif(){const t=document.getElementById('notifTitle').value.trim(),c=document.getElementById('notifContent').value.trim(),f=document.getElementById('notifFile').files[0];if(!t||!c){toast('⚠️ مطلوب عنوان ونص');return;}const n={id:Date.now(),title:t,content:c,image:'',date:new Date().toLocaleDateString('ar-MA')};const save=()=>{DATA.notifications.push(n);saveAllData();renderNotifList();toast('✅ تم النشر! ستظهر عند العودة للتطبيق');document.getElementById('notifTitle').value='';document.getElementById('notifContent').value='';document.getElementById('notifFile').value='';document.getElementById('notifPreview').innerHTML='📷 اضغط';};if(f){const r=new FileReader();r.onload=function(e){n.image=e.target.result;save();};r.readAsDataURL(f);}else{save();}}
-        function deleteNotif(id){if(confirm('حذف؟')){DATA.notifications=DATA.notifications.filter(n=>n.id!==id);saveAllData();renderNotifList();toast('🗑️ تم');}}
+        function addNotif(){const t=document.getElementById('notifTitle').value.trim(),c=document.getElementById('notifContent').value.trim(),f=document.getElementById('notifFile').files[0];if(!t||!c){toast('⚠️ مطلوب عنوان ونص');return;}const n={id:Date.now(),title:t,content:c,image:'',date:new Date().toLocaleDateString('ar-MA')};const save=()=>{DATA.notifications.push(n);saveSharedData();renderNotifList();toast('✅ تم النشر للجميع');document.getElementById('notifTitle').value='';document.getElementById('notifContent').value='';document.getElementById('notifFile').value='';document.getElementById('notifPreview').innerHTML='📷 اضغط';};if(f){const r=new FileReader();r.onload=function(e){n.image=e.target.result;save();};r.readAsDataURL(f);}else{save();}}
+        function deleteNotif(id){if(confirm('حذف؟')){DATA.notifications=DATA.notifications.filter(n=>n.id!==id);saveSharedData();renderNotifList();toast('🗑️ تم للجميع');}}
         function renderNotifList(){const c=document.getElementById('notifList');if(!c)return;if(!DATA.notifications.length){c.innerHTML='<div class="empty-msg">لا توجد إشعارات</div>';return;}c.innerHTML=[...DATA.notifications].reverse().map(n=>`<div class="list-row">${n.image?`<img src="${n.image}">`:'<div style="width:70px;height:50px;background:#f0f0f0;border-radius:8px;display:flex;align-items:center;justify-content:center;">🔔</div>'}<div class="list-info"><strong>${n.title}</strong><small>${n.content.substring(0,40)}...</small></div><button class="btn btn-primary btn-sm" onclick="editNotif(${n.id})">✏️</button><button class="btn btn-danger btn-sm" onclick="deleteNotif(${n.id})">🗑️</button></div>`).join('');}
-        function editNotif(id){const n=DATA.notifications.find(x=>x.id===id);if(n){const t=prompt('العنوان:',n.title);if(t!==null){const c=prompt('النص:',n.content);if(c!==null){n.title=t.trim();n.content=c.trim();saveAllData();renderNotifList();}}}}
+        function editNotif(id){const n=DATA.notifications.find(x=>x.id===id);if(n){const t=prompt('العنوان:',n.title);if(t!==null){const c=prompt('النص:',n.content);if(c!==null){n.title=t.trim();n.content=c.trim();saveSharedData();renderNotifList();}}}}
 
-        function addVideo(){const t=document.getElementById('videoTitle').value.trim(),f=document.getElementById('videoFile').files[0];if(!t||!f){toast('⚠️ مطلوب');return;}const r=new FileReader();r.onload=function(e){DATA.videos.push({id:Date.now(),title:t,url:e.target.result,size:f.size});saveAllData();renderVideoList();toast('✅ تم الرفع! ستظهر عند العودة للتطبيق');document.getElementById('videoTitle').value='';document.getElementById('videoFile').value='';document.getElementById('videoPreview').innerHTML='🎬 اضغط';};r.readAsDataURL(f);}
-        function deleteVideo(id){if(confirm('حذف؟')){DATA.videos=DATA.videos.filter(v=>v.id!==id);saveAllData();renderVideoList();toast('🗑️ تم');}}
+        function addVideo(){const t=document.getElementById('videoTitle').value.trim(),f=document.getElementById('videoFile').files[0];if(!t||!f){toast('⚠️ مطلوب');return;}const r=new FileReader();r.onload=function(e){DATA.videos.push({id:Date.now(),title:t,url:e.target.result,size:f.size});saveSharedData();renderVideoList();toast('✅ تم للجميع');document.getElementById('videoTitle').value='';document.getElementById('videoFile').value='';document.getElementById('videoPreview').innerHTML='🎬 اضغط';};r.readAsDataURL(f);}
+        function deleteVideo(id){if(confirm('حذف؟')){DATA.videos=DATA.videos.filter(v=>v.id!==id);saveSharedData();renderVideoList();toast('🗑️ تم للجميع');}}
         function renderVideoList(){const c=document.getElementById('videoList');if(!c)return;if(!DATA.videos.length){c.innerHTML='<div class="empty-msg">لا توجد فيديوهات</div>';return;}c.innerHTML=DATA.videos.map(v=>`<div class="list-row"><video src="${v.url}" style="width:70px;height:50px;object-fit:cover;border-radius:8px;"></video><div class="list-info"><strong>${v.title}</strong><small>${formatSize(v.size)}</small></div><button class="btn btn-primary btn-sm" onclick="editVideoTitle(${v.id})">✏️</button><button class="btn btn-danger btn-sm" onclick="deleteVideo(${v.id})">🗑️</button></div>`).join('');}
-        function editVideoTitle(id){const v=DATA.videos.find(x=>x.id===id);if(v){const t=prompt('العنوان:',v.title);if(t){v.title=t.trim();saveAllData();renderVideoList();}}}
+        function editVideoTitle(id){const v=DATA.videos.find(x=>x.id===id);if(v){const t=prompt('العنوان:',v.title);if(t){v.title=t.trim();saveSharedData();renderVideoList();}}}
 
-        function addAd(){const t=document.getElementById('adTitle').value.trim(),d=document.getElementById('adDescription').value.trim(),l=document.getElementById('adLink').value.trim(),f=document.getElementById('adMedia').files[0];if(!t||!l||!f){toast('⚠️ مطلوب');return;}const r=new FileReader();r.onload=function(e){DATA.ads.push({id:Date.now(),title:t,description:d,link:l,media:e.target.result,mediaType:f.type.startsWith('video/')?'video':'image'});saveAllData();renderAdsList();toast('✅ تم');document.getElementById('adTitle').value='';document.getElementById('adDescription').value='';document.getElementById('adLink').value='';document.getElementById('adMedia').value='';document.getElementById('adPreview').innerHTML='📷 اضغط';};r.readAsDataURL(f);}
-        function deleteAd(id){if(confirm('حذف؟')){DATA.ads=DATA.ads.filter(a=>a.id!==id);saveAllData();renderAdsList();toast('🗑️ تم');}}
+        function addAd(){const t=document.getElementById('adTitle').value.trim(),d=document.getElementById('adDescription').value.trim(),l=document.getElementById('adLink').value.trim(),f=document.getElementById('adMedia').files[0];if(!t||!l||!f){toast('⚠️ مطلوب');return;}const r=new FileReader();r.onload=function(e){DATA.ads.push({id:Date.now(),title:t,description:d,link:l,media:e.target.result,mediaType:f.type.startsWith('video/')?'video':'image'});saveSharedData();renderAdsList();toast('✅ تم للجميع');document.getElementById('adTitle').value='';document.getElementById('adDescription').value='';document.getElementById('adLink').value='';document.getElementById('adMedia').value='';document.getElementById('adPreview').innerHTML='📷 اضغط';};r.readAsDataURL(f);}
+        function deleteAd(id){if(confirm('حذف؟')){DATA.ads=DATA.ads.filter(a=>a.id!==id);saveSharedData();renderAdsList();toast('🗑️ تم للجميع');}}
         function renderAdsList(){const c=document.getElementById('adsList');if(!c)return;if(!DATA.ads.length){c.innerHTML='<div class="empty-msg">📢 لا توجد إشهارات</div>';return;}c.innerHTML=DATA.ads.map(a=>`<div class="list-row">${a.mediaType==='video'?`<video src="${a.media}" style="width:70px;height:50px;object-fit:cover;border-radius:8px;"></video>`:`<img src="${a.media}" style="width:70px;height:50px;object-fit:cover;border-radius:8px;">`}<div class="list-info"><strong>${a.title}</strong></div><button class="btn btn-primary btn-sm" onclick="editAd(${a.id})">✏️</button><button class="btn btn-danger btn-sm" onclick="deleteAd(${a.id})">🗑️</button></div>`).join('');}
-        function editAd(id){const a=DATA.ads.find(x=>x.id===id);if(a){const t=prompt('العنوان:',a.title);if(t!==null){const d=prompt('الوصف:',a.description||'');if(d!==null){const l=prompt('الرابط:',a.link);if(l!==null){a.title=t.trim();a.description=d.trim();a.link=l.trim();saveAllData();renderAdsList();}}}}}
+        function editAd(id){const a=DATA.ads.find(x=>x.id===id);if(a){const t=prompt('العنوان:',a.title);if(t!==null){const d=prompt('الوصف:',a.description||'');if(d!==null){const l=prompt('الرابط:',a.link);if(l!==null){a.title=t.trim();a.description=d.trim();a.link=l.trim();saveSharedData();renderAdsList();}}}}}
 
-        function saveColors(){DATA.settings.app_color=document.getElementById('setAppColor').value;DATA.settings.button_color=document.getElementById('setButtonColor').value;DATA.settings.bg_color=document.getElementById('setBgColor').value;DATA.settings.title_color=document.getElementById('setTitleColor').value;saveAllData();applyColors();toast('✅ تم');}
+        function saveColors(){DATA.settings.app_color=document.getElementById('setAppColor').value;DATA.settings.button_color=document.getElementById('setButtonColor').value;DATA.settings.bg_color=document.getElementById('setBgColor').value;DATA.settings.title_color=document.getElementById('setTitleColor').value;saveSharedData();applyColors();toast('✅ تم للجميع');}
 
         function previewFile(i,p,t){const input=document.getElementById(i),preview=document.getElementById(p);if(!input.files[0]||!preview)return;const r=new FileReader();r.onload=function(e){preview.innerHTML=t==='image'?`<img src="${e.target.result}">`:`<video src="${e.target.result}" controls></video>`;};r.readAsDataURL(input.files[0]);}
 
         function toast(msg){const old=document.querySelector('.toast-msg');if(old)old.remove();const t=document.createElement('div');t.className='toast-msg';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>{if(t.parentNode)t.remove();},4000);}
 
         function startApp(){
-            loadAllData();
+            DATA = loadSharedData();
             applyColors();
             buildSlider();
-            renderSingleNotif();
-            renderSingleVideo();
+            refreshHomeContent();
             setTimeout(() => {
                 const splash = document.getElementById('splashScreen');
-                if (splash) {
-                    splash.classList.add('hide');
-                    setTimeout(() => { if (splash.parentNode) splash.remove(); }, 500);
-                }
+                if (splash) { splash.classList.add('hide'); setTimeout(() => { if (splash.parentNode) splash.remove(); }, 500); }
             }, 800);
         }
         
